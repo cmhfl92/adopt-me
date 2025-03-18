@@ -1,15 +1,17 @@
 import axios from 'axios';
 
 const API_URL = 'https://frontend-take-home-service.fetch.com';
-const HEADERS = { headers: { 'Content-Type': 'application/json' } };
-
+const HEADERS = {
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
+};
 //auth api to hit the endpoint for login.
 export const loginUser = async (name, email) => {
   try {
     const response = await axios.post(
       `${API_URL}/auth/login`,
       {name, email},
-      {headers: {"Content-Type": "application/json"}, withCredentials: true},
+      HEADERS,
     );
     return response.status === 200;
   } catch (error) {
@@ -20,7 +22,7 @@ export const loginUser = async (name, email) => {
 //checking auth status.
 export const checkAuth = async () => {
   try {
-    const response = await axios.get(`${API_URL}/auth/status`, { withCredentials: true})
+    const response = await axios.get(`${API_URL}/auth/status`, HEADERS)
     return response.data;
   } catch (error) {
     return null;
@@ -29,7 +31,7 @@ export const checkAuth = async () => {
 
 //logout user.
 export const logoutUser = async () => {
-    const response = await axios.post(`${API_URL}/auth/logout`, {}, {withCredentials: true})
+    const response = await axios.post(`${API_URL}/auth/logout`, {}, HEADERS)
 }
 
 // fetch available breeds.
