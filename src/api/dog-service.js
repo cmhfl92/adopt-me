@@ -3,14 +3,44 @@ import axios from 'axios';
 const API_URL = 'https://frontend-take-home-service.fetch.com';
 const HEADERS = { headers: { 'Content-Type': 'application/json' } };
 
-// Fetch available breeds
-export const fetchBreeds = async () => {
-  const response = await axios.get(`${API_URL}/dogs/breeds`, HEADERS);
-  return response.data; // Array of breed names
+//auth api to hit the endpoint for login.
+export const loginUser = async (name, email) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/auth/login`,
+      {name, email},
+      {headers: {"Content-Type": "application/json"}, withCredentials: true},
+    );
+    return response.status === 200;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Login Failed')
+  }
 };
 
-// Fetch dogs based on filters
+//checking auth status.
+export const checkAuth = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/auth/status`, { withCredentials: true})
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+//logout user.
+export const logoutUser = async () => {
+    const response = await axios.post(`${API_URL}/auth/logout`, {}, {withCredentials: true})
+}
+
+// fetch available breeds.
+export const fetchBreeds = async () => {
+  const response = await axios.get(`${API_URL}/dogs/breeds`, HEADERS);
+  return response.data;
+};
+
+// fetch dogs based on filters.
 export const fetchDogs = async filters => {
+  console.log("filters", filters)
   const params = new URLSearchParams();
 
   if (filters.breeds.length) params.append('breeds', filters.breeds.join(','));
@@ -26,5 +56,5 @@ export const fetchDogs = async filters => {
     `${API_URL}/dogs/search?${params.toString()}`,
     HEADERS
   );
-  return response.data; // Contains resultIds, total, next, prev
+  return response.data;
 };
