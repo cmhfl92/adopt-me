@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'https://frontend-take-home-service.fetch.com';
 const HEADERS = {
-  headers: { "Content-Type": "application/json" },
+  headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 };
 //auth api to hit the endpoint for login.
@@ -10,29 +10,29 @@ export const loginUser = async (name, email) => {
   try {
     const response = await axios.post(
       `${API_URL}/auth/login`,
-      {name, email},
-      HEADERS,
+      { name, email },
+      HEADERS
     );
     return response.status === 200;
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Login Failed')
+    throw new Error(error.response?.data?.message || 'Login Failed');
   }
 };
 
 //checking auth status.
 export const checkAuth = async () => {
   try {
-    const response = await axios.get(`${API_URL}/auth/status`, HEADERS)
+    const response = await axios.get(`${API_URL}/auth/status`, HEADERS);
     return response.data;
   } catch (error) {
     return null;
   }
-}
+};
 
 //logout user.
 export const logoutUser = async () => {
-    const response = await axios.post(`${API_URL}/auth/logout`, {}, HEADERS)
-}
+  const response = await axios.post(`${API_URL}/auth/logout`, {}, HEADERS);
+};
 
 // fetch available breeds.
 export const fetchBreeds = async () => {
@@ -42,7 +42,7 @@ export const fetchBreeds = async () => {
 
 // fetch dogs based on filters.
 export const fetchDogs = async filters => {
-  console.log("filters", filters)
+  console.log('filters', filters);
   const params = new URLSearchParams();
 
   if (filters.breeds.length) params.append('breeds', filters.breeds.join(','));

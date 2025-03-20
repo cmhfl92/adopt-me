@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { checkAuth } from "../api/dog-service";
+import { createContext, useContext, useState, useEffect } from 'react';
+import { checkAuth } from '../api/dog-service';
 
 const AuthContext = createContext(null);
 
@@ -7,7 +7,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    checkAuth().then(setUser).catch(() => setUser(null));
+    checkAuth()
+      .then(setUser)
+      .catch(() => setUser(null));
   }, []);
 
   return (
@@ -18,9 +20,9 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-      throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-  };
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
