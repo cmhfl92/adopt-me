@@ -63,7 +63,8 @@ export const fetchDogs = async filters => {
 
 //fetching dog details
 export const fetchDogDetails = async dogIds => {
-  if (!dogIds || dogIds.length === 0) return [];
+  if (!dogIds.length) return [];
+
   const response = await axios.post(`${API_URL}/dogs`, dogIds, HEADERS);
   return response.data;
 };

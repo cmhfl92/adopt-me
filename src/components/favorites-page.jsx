@@ -11,8 +11,10 @@ import {
   CardMedia,
   Button,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const FavoritesPage = () => {
+  const navigate = useNavigate();
   const { favorites, removeFavorite, clearFavorites } = useFavorites();
   const [matchedDog, setMatchedDog] = useState(null);
 
@@ -24,15 +26,33 @@ const FavoritesPage = () => {
 
   const handleFindMatch = async () => {
     try {
-      const matchData = await fetchMatch(favorites);
-      setMatchedDog(matchData[0]);
+      const matchResponse = await fetchMatch(favorites);
+      console.log('API Response:', matchResponse);
+
+      const matchedDogId = matchResponse.match;
+      if (!matchedDogId) {
+        alert('No match found!');
+        return;
+      }
+
+      const matchedDogDetails = await fetchDogDetails([matchedDogId]);
+      if (matchedDogDetails.length === 0) {
+        alert("Could not fetch matched dog's details!");
+        return;
+      }
+
+      setMatchedDog(matchedDogDetails[0]);
     } catch (error) {
+      console.error('Match API Error:', error);
       alert('Error finding match! Try again.');
     }
   };
 
   return (
     <Container>
+      <Button variant='text' color='primary' onClick={() => navigate('/dogs')}>
+        Back To Search
+      </Button>
       <h1>My Favorite Dogs</h1>
       {isLoading && <p>Loading...</p>}
       {favoriteDogs?.length === 0 && <p>No favorites yet.</p>}
@@ -95,7 +115,7 @@ const FavoritesPage = () => {
           <Card>
             <CardMedia
               component='img'
-              height='200'
+              height='500'
               image={matchedDog.img}
               alt={matchedDog.name}
             />
