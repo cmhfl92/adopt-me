@@ -38,7 +38,7 @@ const FavoritesPage = () => {
       {favoriteDogs?.length === 0 && <p>No favorites yet.</p>}
 
       <Button
-        variant='contained'
+        variant='outlined'
         color='error'
         onClick={clearFavorites}
         disabled={favorites.length === 0}
@@ -46,7 +46,13 @@ const FavoritesPage = () => {
         Clear Favorites
       </Button>
 
-      <Grid container spacing={2}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          padding: '10px 0',
+        }}
+      >
         {favoriteDogs?.map(dog => (
           <Grid item xs={12} sm={6} md={4} key={dog.id}>
             <Card>
@@ -62,7 +68,7 @@ const FavoritesPage = () => {
                 <Typography>Age: {dog.age} years</Typography>
                 <Typography>Location: {dog.zip_code}</Typography>
                 <Button
-                  variant='contained'
+                  variant='outlined'
                   color='error'
                   onClick={() => removeFavorite(dog.id)}
                 >
