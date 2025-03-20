@@ -17,8 +17,10 @@ import {
 } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useNavigate } from 'react-router-dom';
 
 const DogsList = () => {
+  const navigate = useNavigate();
   const [breeds, setBreeds] = useState([]);
   const [selectedBreed, setSelectedBreed] = useState('');
   const [zipCode, setZipCode] = useState('');
@@ -65,6 +67,14 @@ const DogsList = () => {
   return (
     <Container>
       <h1>Browse Available Dogs</h1>
+      <Button
+        variant='contained'
+        color='secondary'
+        onClick={() => navigate('/favorites')}
+        style={{ marginBottom: '20px' }}
+      >
+        View Favorites
+      </Button>
       {/* filters */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <Select

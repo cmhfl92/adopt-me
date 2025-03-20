@@ -67,3 +67,15 @@ export const fetchDogDetails = async dogIds => {
   const response = await axios.post(`${API_URL}/dogs`, dogIds, HEADERS);
   return response.data;
 };
+
+//fetch favorites match
+export const fetchMatch = async favoriteDogIds => {
+  if (!favoriteDogIds.length) throw new Error('No favorite dogs selected!');
+
+  const response = await axios.post(
+    `${API_URL}/dogs/match`,
+    favoriteDogIds,
+    HEADERS
+  );
+  return response.data;
+};

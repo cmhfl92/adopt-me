@@ -9,6 +9,7 @@ import { FavoritesProvider } from './hooks/useFavorites';
 import DogsList from './components/dog-list';
 import LoginPage from './components/login-page';
 import Navbar from './components/navbar';
+import FavoritesPage from './components/favorites-page';
 
 function AppRoutes() {
   const { user } = useAuth();
@@ -22,6 +23,7 @@ function AppRoutes() {
           path='/dogs'
           element={user ? <DogsList /> : <Navigate to='/login' />}
         />
+        <Route path='/favorites' element={<FavoritesPage />} />
       </Routes>
     </>
   );
