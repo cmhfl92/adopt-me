@@ -9,7 +9,7 @@ function AppRoutes() {
 
   return (
     <>
-    <Navbar />
+    {user && <Navbar />}
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/dogs" element={user ? <DogsList /> : <Navigate to="/login" />} />

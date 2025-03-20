@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Button } from "@mui/material";
+import { AppBar, Toolbar, Button, Box } from "@mui/material";
 import { useAuth } from "../hooks/useAuth";
 import { logoutUser } from "../api/dog-service";
 import { useNavigate } from "react-router-dom";
@@ -18,15 +18,11 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        {user ? (
-          <Button color="inherit" onClick={handleLogout}>
+        <Box sx={{ flexGrow: 1}}>
+          <Button color="inherit"  onClick={handleLogout}>
             Logout
           </Button>
-        ) : (
-          <Button color="inherit" onClick={() => navigate("/login")}>
-            Login
-          </Button>
-        )}
+        </Box>
       </Toolbar>
     </AppBar>
   );
