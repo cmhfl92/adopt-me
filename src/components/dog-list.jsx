@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchBreeds, fetchDogs } from '../api/dog-service';
+import { fetchBreeds, fetchDogs, fetchDogDetails } from '../api/dog-service';
 import {
   Container,
   TextField,
@@ -12,6 +12,7 @@ import {
   CardContent,
   Typography,
   Pagination,
+  CardMedia,
 } from '@mui/material';
 
 const DogsList = () => {
@@ -28,7 +29,11 @@ const DogsList = () => {
     fetchBreeds().then(setBreeds);
   }, []);
 
-  const { data, isLoading, error } = useQuery({
+  const {
+    data: searchData,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: [
       'dogs',
       { selectedBreed, zipCode, ageMin, ageMax, sortOrder, pageCursor },
@@ -46,13 +51,18 @@ const DogsList = () => {
     keepPreviousData: true,
   });
 
-  console.log('data', data);
+  //dog details:
+  const { data: dogs, isLoading: isLoadingDetails } = useQuery({
+    queryKey: ['dogDetails', searchData?.resultIds],
+    queryFn: () => fetchDogDetails(searchData?.resultIds || []),
+    enabled: !!searchData?.resultIds,
+  });
 
   return (
     <Container>
       <h1>Browse Available Dogs</h1>
 
-      {/* Filters */}
+      {/* filters */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <Select
           value={selectedBreed}
@@ -96,23 +106,27 @@ const DogsList = () => {
           <MenuItem value='age:asc'>Age (Youngest First)</MenuItem>
           <MenuItem value='age:desc'>Age (Oldest First)</MenuItem>
         </Select>
-
-        <Button variant='contained' onClick={() => setPageCursor(null)}>
-          Apply
-        </Button>
       </div>
 
-      {/* Loading and Error Handling */}
       {isLoading && <p>Loading...</p>}
       {error && <p>Error loading dogs.</p>}
 
-      {/* Dog Cards */}
+      {/* dog details */}
       <Grid container spacing={2}>
-        {data?.resultIds.map(id => (
-          <Grid item xs={12} sm={6} md={4} key={id}>
+        {dogs?.map(dog => (
+          <Grid item xs={12} sm={6} md={4} key={dog.id}>
             <Card>
+              <CardMedia
+                component='img'
+                height='200'
+                image={dog.img}
+                alt={dog.name}
+              />
               <CardContent>
-                <Typography variant='h6'>Dog ID: {id}</Typography>
+                <Typography variant='h6'>{dog.name}</Typography>
+                <Typography>Breed: {dog.breed}</Typography>
+                <Typography>Age: {dog.age} years</Typography>
+                <Typography>Location: {dog.zip_code}</Typography>
               </CardContent>
             </Card>
           </Grid>
