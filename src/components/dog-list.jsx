@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchBreeds, fetchDogs, fetchDogDetails } from '../api/dog-service';
+import { useFavorites } from '../hooks/useFavorites';
 import {
   Container,
   TextField,
@@ -14,6 +15,8 @@ import {
   Pagination,
   CardMedia,
 } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const DogsList = () => {
   const [breeds, setBreeds] = useState([]);
@@ -24,6 +27,7 @@ const DogsList = () => {
   const [sortOrder, setSortOrder] = useState('breed:asc');
   const [pageCursor, setPageCursor] = useState(null);
   const pageSize = 10;
+  const { favorites, addFavorite, removeFavorite } = useFavorites();
 
   useEffect(() => {
     fetchBreeds().then(setBreeds);
@@ -61,7 +65,6 @@ const DogsList = () => {
   return (
     <Container>
       <h1>Browse Available Dogs</h1>
-
       {/* filters */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <Select
@@ -107,10 +110,8 @@ const DogsList = () => {
           <MenuItem value='age:desc'>Age (Oldest First)</MenuItem>
         </Select>
       </div>
-
       {isLoading && <p>Loading...</p>}
       {error && <p>Error loading dogs.</p>}
-
       {/* dog details */}
       <Grid container spacing={2}>
         {dogs?.map(dog => (
@@ -127,19 +128,56 @@ const DogsList = () => {
                 <Typography>Breed: {dog.breed}</Typography>
                 <Typography>Age: {dog.age} years</Typography>
                 <Typography>Location: {dog.zip_code}</Typography>
+                <Button
+                  startIcon={
+                    favorites.includes(dog.id) ? (
+                      <FavoriteIcon color='error' />
+                    ) : (
+                      <FavoriteBorderIcon />
+                    )
+                  }
+                  onClick={() =>
+                    favorites.includes(dog.id)
+                      ? removeFavorite(dog.id)
+                      : addFavorite(dog.id)
+                  }
+                >
+                  {favorites.includes(dog.id) ? 'Unfavorite' : 'Favorite'}
+                </Button>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
-
-      {/* Pagination */}
-      {/* <Pagination
-        count={data?.totalPages || 1}
-        page={page}
-        onChange={(_, value) => setPage(value)}
-        sx={{ marginTop: '20px' }}
-      />{' '} */}
+      {/* cursor-based pagination */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '20px',
+        }}
+      >
+        {searchData?.prev && (
+          <Button
+            variant='outlined'
+            onClick={() =>
+              setPageCursor(new URLSearchParams(searchData.prev).get('from'))
+            }
+          >
+            Previous
+          </Button>
+        )}
+        {searchData?.next && (
+          <Button
+            variant='contained'
+            onClick={() =>
+              setPageCursor(new URLSearchParams(searchData.next).get('from'))
+            }
+          >
+            Next
+          </Button>
+        )}
+      </div>
     </Container>
   );
 };

@@ -5,6 +5,7 @@ import {
   Navigate,
 } from 'react-router-dom';
 import { useAuth, AuthProvider } from './hooks/useAuth';
+import { FavoritesProvider } from './hooks/useFavorites';
 import DogsList from './components/dog-list';
 import LoginPage from './components/login-page';
 import Navbar from './components/navbar';
@@ -29,9 +30,11 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
+      <FavoritesProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </FavoritesProvider>
     </AuthProvider>
   );
 }
