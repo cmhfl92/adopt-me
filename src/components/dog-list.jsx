@@ -46,6 +46,8 @@ const DogsList = () => {
     keepPreviousData: true,
   });
 
+  console.log('data', data)
+
   return (
     <Container>
       <h1>Browse Available Dogs</h1>

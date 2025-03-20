@@ -2,15 +2,19 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { useAuth, AuthProvider } from "./hooks/useAuth";
 import DogsList from "./components/dog-list";
 import LoginPage from "./components/login-page";
+import Navbar from "./components/navbar";
 
 function AppRoutes() {
   const { user } = useAuth();
 
   return (
+    <>
+    <Navbar />
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/dogs" element={user ? <DogsList /> : <Navigate to="/login" />} />
     </Routes>
+    </>
   );
 }
 
