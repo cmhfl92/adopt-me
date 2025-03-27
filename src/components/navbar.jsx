@@ -10,13 +10,13 @@ const Navbar = () => {
   const handleLogout = async () => {
     await logoutUser();
     setUser(null);
-    navigate('/login');
+    navigate('/');
   };
 
   return (
-    <AppBar position='static'>
+    <AppBar position='relative'>
       <Toolbar>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, position: 'absolute', right: 2 }}>
           <Button color='inherit' onClick={handleLogout}>
             Logout
           </Button>

@@ -21,7 +21,7 @@ function AppRoutes() {
         <Route path='' element={<LoginPage />} />
         <Route
           path='/dogs'
-          element={user ? <DogsList /> : <Navigate to='' />}
+          element={user ? <DogsList /> : <Navigate to='/' />}
         />
         <Route path='/favorites' element={<FavoritesPage />} />
       </Routes>
